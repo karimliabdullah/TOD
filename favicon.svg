@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <defs>
+        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F4E3AD"/>
+            <stop offset="50%" stop-color="#E5C158"/>
+            <stop offset="100%" stop-color="#99751D"/>
+        </linearGradient>
+    </defs>
+    <!-- Outer Ring -->
+    <circle cx="100" cy="100" r="94" fill="#0B0B0E" stroke="url(#goldGrad)" stroke-width="3"/>
+    <circle cx="100" cy="100" r="88" fill="none" stroke="url(#goldGrad)" stroke-width="1" stroke-dasharray="4,3"/>
+
+    <!-- Inner Decorative Leaves -->
+    <path d="M 60 75 C 50 65, 45 80, 62 85 M 58 85 C 48 80, 45 95, 62 95" stroke="url(#goldGrad)" stroke-width="1.5" fill="none"/>
+    <path d="M 140 75 C 150 65, 155 80, 138 85 M 142 85 C 152 80, 155 95, 138 95" stroke="url(#goldGrad)" stroke-width="1.5" fill="none"/>
+
+    <!-- Chef Hat Illustration -->
+    <path d="M82,62 C75,62 72,52 82,45 C88,38 112,38 118,45 C128,52 125,62 118,62 C125,65 120,72 115,72 L85,72 C80,72 75,65 82,62 Z" fill="url(#goldGrad)"/>
+    <rect x="85" y="73" width="30" height="5" rx="1" fill="url(#goldGrad)"/>
+    <path d="M 100,75 L 100,77" stroke="#000" stroke-width="1"/>
+
+    <!-- Pot Illustration -->
+    <path d="M85,115 L115,115 C117,115 119,117 119,120 L116,132 C115,136 110,138 100,138 C90,138 85,136 84,132 L81,120 C81,117 83,115 85,115 Z" fill="url(#goldGrad)"/>
+    <rect x="83" y="112" width="34" height="3" rx="1" fill="url(#goldGrad)"/>
+    <circle cx="100" cy="109" r="2" fill="url(#goldGrad)"/>
+    <!-- Pot Handles -->
+    <path d="M78,118 C75,118 75,124 78,124" stroke="url(#goldGrad)" stroke-width="2" fill="none"/>
+    <path d="M122,118 C125,118 125,124 122,124" stroke="url(#goldGrad)" stroke-width="2" fill="none"/>
+
+    <!-- Heart Accents -->
+    <path d="M100,67 C100,65 98,64 97,65.5 C96,64 94,65 94,67 C94,69 100,71 100,71 C100,71 106,69 106,67 C106,65 104,64 103,65.5 C102,64 100,65 100,67 Z" fill="#000" transform="scale(0.6) translate(66,35)"/>
+    <path d="M100,126 C100,124 98,123 97,124.5 C96,123 94,124 94,126 C94,128 100,130 100,130 C100,130 106,128 106,126 C106,124 104,123 103,124.5 C102,123 100,124 100,126 Z" fill="#000" transform="scale(0.6) translate(66,115)"/>
+
+    <!-- Stars / Sparkles -->
+    <polygon points="100,146 102,150 106,150 103,153 104,157 100,154 96,157 97,153 94,150 98,150" fill="url(#goldGrad)"/>
+</svg>

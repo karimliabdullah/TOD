@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кафе Вкус Мечты | Menu</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -39,10 +40,69 @@
         /* Header */
         header {
             text-align: center;
-            padding: 2.5rem 1.5rem 1rem;
+            padding: 0 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        /* Collapsible header wrapper: animates real content height on scroll
+           via the grid-template-rows 1fr -> 0fr trick (no fixed px guessing). */
+        .header-collapsible {
+            display: grid;
+            grid-template-rows: 1fr;
+            width: 100%;
+            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-collapsible-inner {
+            overflow: hidden;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2.5rem 0 1rem;
+            transition: padding 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+        }
+
+        body.scrolled .header-collapsible {
+            grid-template-rows: 0fr;
+        }
+
+        body.scrolled .header-collapsible-inner {
+            padding: 0 0;
+            opacity: 0;
+        }
+
+        /* Floating mini language switcher, revealed once the header collapses */
+        .lang-switcher-mini {
+            position: fixed;
+            top: 0.9rem;
+            right: 1.2rem;
+            z-index: 150;
+            display: inline-flex;
+            gap: 0.4rem;
+            background: rgba(20, 20, 26, 0.85);
+            padding: 4px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transform: translateY(-12px) scale(0.9);
+            pointer-events: none;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        body.scrolled .lang-switcher-mini {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .lang-switcher-mini .lang-btn {
+            padding: 0.3rem 0.9rem;
+            font-size: 0.7rem;
         }
 
         /* Custom SVG Logo Badge styling */
@@ -137,6 +197,16 @@
             gap: 0.75rem;
             overflow-x: auto;
             scrollbar-width: none;
+            transition: margin-right 0.4s ease;
+        }
+
+        /* On narrow screens the floating lang switcher would otherwise sit on
+           top of the pills row once the header collapses — recede the row's
+           visible width so it scrolls under the switcher instead. */
+        @media (max-width: 640px) {
+            body.scrolled .main-pills {
+                margin-right: 12rem;
+            }
         }
 
         .main-pills::-webkit-scrollbar {
@@ -655,7 +725,16 @@
 </head>
 <body>
 
+    <!-- Floating language switcher: hidden until the header collapses on scroll -->
+    <div class="lang-switcher-mini" id="lang-switcher-mini">
+        <button class="lang-btn active" onclick="changeLang('ru')">RU</button>
+        <button class="lang-btn" onclick="changeLang('az')">AZ</button>
+        <button class="lang-btn" onclick="changeLang('en')">EN</button>
+    </div>
+
     <header>
+      <div class="header-collapsible" id="header-collapsible">
+        <div class="header-collapsible-inner">
         <!-- Custom Vector Badge Logo matching your sticker design -->
         <div class="logo-wrapper">
             <svg viewBox="0 0 200 200" width="100%" height="100%">
@@ -705,6 +784,8 @@
             <button class="lang-btn" onclick="changeLang('az')">AZ</button>
             <button class="lang-btn" onclick="changeLang('en')">EN</button>
         </div>
+        </div>
+      </div>
     </header>
 
     <!-- Sticky Navigation Layout -->
@@ -1200,7 +1281,24 @@
             if (e.key === 'Escape') closeItemDetail();
         });
 
+        // Collapse the header into the floating top-right language switcher on scroll.
+        const SCROLL_COLLAPSE_THRESHOLD = 60;
+        let scrollTicking = false;
+
+        function updateScrolledState() {
+            document.body.classList.toggle('scrolled', window.scrollY > SCROLL_COLLAPSE_THRESHOLD);
+            scrollTicking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                requestAnimationFrame(updateScrolledState);
+                scrollTicking = true;
+            }
+        }, { passive: true });
+
         init();
+        updateScrolledState();
     </script>
 </body>
 </html>
