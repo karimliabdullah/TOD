@@ -266,19 +266,56 @@
         .menu-item {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            padding: 1.6rem;
+            padding: 0;
             border-radius: 12px;
             backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .menu-item:hover {
             border-color: var(--card-border-hover);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .item-image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(0,0,0,0.3));
+        }
+
+        .item-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .menu-item:hover .item-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .item-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11,11,14,0.55) 0%, rgba(11,11,14,0) 45%);
+            pointer-events: none;
+        }
+
+        .item-body {
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
         }
 
         .item-header {
@@ -568,16 +605,16 @@
                 "category_az": "Soyuq Qəlyanaltılar",
                 "category_en": "Cold Appetizers",
                 "items": [
-                    { "name_ru": "Соленья ассорти", "name_az": "Turşu assortisi", "name_en": "Pickled Assortment", "description": "Огурцы, помидоры, капуста, чеснок, перец", "portion": "250 g", "price_rub": 350 },
-                    { "name_ru": "Рулет из баклажанов", "name_az": "Badımcan ruleti", "name_en": "Eggplant Rolls", "description": "Баклажан, сырная начинка, грецкий орех, зелень", "portion": "150 g", "price_rub": 350 },
-                    { "name_ru": "Зеленая тарелка", "name_az": "Göyərti boşqabı", "name_en": "Green Herb Platter", "description": "Петрушка, лук зеленый, укроп", "portion": "120 g", "price_rub": 180 },
-                    { "name_ru": "Фруктовое плато", "name_az": "Meyvə boşqabı", "name_en": "Fruit Platter", "description": "Сезонные фрукты", "portion": "800 g", "price_rub": 490 },
-                    { "name_ru": "Помидоры Бакинские", "name_az": "Bakı pomidoru", "name_en": "Baku Tomatoes", "description": null, "portion": "180 g", "price_rub": 220 },
-                    { "name_ru": "Огурцы Бакинские", "name_az": "Bakı xiyarı", "name_en": "Baku Cucumbers", "description": null, "portion": "180 g", "price_rub": 220 },
-                    { "name_ru": "Лимон", "name_az": "Limon", "name_en": "Lemon", "description": null, "portion": "100 g", "price_rub": 80 },
-                    { "name_ru": "Довга", "name_az": "Dovğa", "name_en": "Dovga", "description": "Кисломолочный суп, травы, нут, рис, мука, яйцо", "portion_options": [{ "portion": "200 ml", "price_rub": 150 }, { "portion": "1 L", "price_rub": 750 }] },
-                    { "name_ru": "Айран", "name_az": "Ayran", "name_en": "Ayran", "description": "Охлаждающий напиток на основе кефира", "portion_options": [{ "portion": "200 ml", "price_rub": 100 }, { "portion": "1 L", "price_rub": 350 }] },
-                    { "name_ru": "Окрошка", "name_az": "Okroşka", "name_en": "Okroshka", "description": null, "portion_options": [{ "portion": "200 ml", "price_rub": 150 }, { "portion": "1 L", "price_rub": 400 }] }
+                    { "name_ru": "Соленья ассорти", "name_az": "Turşu assortisi", "name_en": "Pickled Assortment", "description": "Огурцы, помидоры, капуста, чеснок, перец", "portion": "250 g", "price_rub": 350, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Pickled_Vegetables.JPG/500px-Pickled_Vegetables.JPG" },
+                    { "name_ru": "Рулет из баклажанов", "name_az": "Badımcan ruleti", "name_en": "Eggplant Rolls", "description": "Баклажан, сырная начинка, грецкий орех, зелень", "portion": "150 g", "price_rub": 350, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Eggplant_rolls.jpg/500px-Eggplant_rolls.jpg" },
+                    { "name_ru": "Зеленая тарелка", "name_az": "Göyərti boşqabı", "name_en": "Green Herb Platter", "description": "Петрушка, лук зеленый, укроп", "portion": "120 g", "price_rub": 180, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Parsley%3B_Petroselinum_sativum.JPG/500px-Parsley%3B_Petroselinum_sativum.JPG" },
+                    { "name_ru": "Фруктовое плато", "name_az": "Meyvə boşqabı", "name_en": "Fruit Platter", "description": "Сезонные фрукты", "portion": "800 g", "price_rub": 490, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Fruit_plate_with_fresh_fruits.jpg/500px-Fruit_plate_with_fresh_fruits.jpg" },
+                    { "name_ru": "Помидоры Бакинские", "name_az": "Bakı pomidoru", "name_en": "Baku Tomatoes", "description": null, "portion": "180 g", "price_rub": 220, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tomatoes_plain_and_sliced.jpg/500px-Tomatoes_plain_and_sliced.jpg" },
+                    { "name_ru": "Огурцы Бакинские", "name_az": "Bakı xiyarı", "name_en": "Baku Cucumbers", "description": null, "portion": "180 g", "price_rub": 220, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Cucumber_Slices.JPG/500px-Cucumber_Slices.JPG" },
+                    { "name_ru": "Лимон", "name_az": "Limon", "name_en": "Lemon", "description": null, "portion": "100 g", "price_rub": 80, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Lemon_-_whole_and_split.jpg/500px-Lemon_-_whole_and_split.jpg" },
+                    { "name_ru": "Довга", "name_az": "Dovğa", "name_en": "Dovga", "description": "Кисломолочный суп, травы, нут, рис, мука, яйцо", "portion_options": [{ "portion": "200 ml", "price_rub": 150 }, { "portion": "1 L", "price_rub": 750 }], "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Dovga_e-citizen.JPG/500px-Dovga_e-citizen.JPG" },
+                    { "name_ru": "Айран", "name_az": "Ayran", "name_en": "Ayran", "description": "Охлаждающий напиток на основе кефира", "portion_options": [{ "portion": "200 ml", "price_rub": 100 }, { "portion": "1 L", "price_rub": 350 }], "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Fresh_ayran.jpg/500px-Fresh_ayran.jpg" },
+                    { "name_ru": "Окрошка", "name_az": "Okroşka", "name_en": "Okroshka", "description": null, "portion_options": [{ "portion": "200 ml", "price_rub": 150 }, { "portion": "1 L", "price_rub": 400 }], "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/%D0%9E%D0%BA%D1%80%D0%BE%D1%88%D0%BA%D0%B0_Okroshka_05.jpg/500px-%D0%9E%D0%BA%D1%80%D0%BE%D1%88%D0%BA%D0%B0_Okroshka_05.jpg" }
                 ]
             },
             "salads": {
@@ -586,10 +623,10 @@
                 "category_az": "Salatlar",
                 "category_en": "Salads",
                 "items": [
-                    { "name_ru": "Салат «Чобан»", "name_az": "Çoban salatı", "name_en": "Choban Salad", "description": "Помидор, огурец, красный лук, зелень ассорти, оливковое масло", "portion": "200 g", "price_rub": 330 },
-                    { "name_ru": "Салат «Мангал»", "name_az": "Manqal salatı", "name_en": "Mangal Salad", "description": "Красный перец, баклажан, помидор, чеснок, оливковое масло", "portion": "200 g", "price_rub": 340 },
-                    { "name_ru": "Оливье", "name_az": "Olivye salatı", "name_en": "Olivier Salad", "description": "Филе куриное, морковь, яйца, картофель отварной, горох зеленый, свежие огурцы, укроп", "portion": "200 g", "price_rub": 290 },
-                    { "name_ru": "Мечта", "name_az": "Xəyal salatı", "name_en": "Mechta Salad", "description": "Красная фасоль, белая фасоль, кукуруза, куриное филе, укроп, зеленый лук, майонез", "portion": "200 g", "price_rub": 350 }
+                    { "name_ru": "Салат «Чобан»", "name_az": "Çoban salatı", "name_en": "Choban Salad", "description": "Помидор, огурец, красный лук, зелень ассорти, оливковое масло", "portion": "200 g", "price_rub": 330, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tomato_cucumber_salad.jpg/500px-Tomato_cucumber_salad.jpg" },
+                    { "name_ru": "Салат «Мангал»", "name_az": "Manqal salatı", "name_en": "Mangal Salad", "description": "Красный перец, баклажан, помидор, чеснок, оливковое масло", "portion": "200 g", "price_rub": 340, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Eggplant_salad_%28on_the_house%29.jpg/500px-Eggplant_salad_%28on_the_house%29.jpg" },
+                    { "name_ru": "Оливье", "name_az": "Olivye salatı", "name_en": "Olivier Salad", "description": "Филе куриное, морковь, яйца, картофель отварной, горох зеленый, свежие огурцы, укроп", "portion": "200 g", "price_rub": 290, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Russian_Olivier_salad_sl.JPG/500px-Russian_Olivier_salad_sl.JPG" },
+                    { "name_ru": "Мечта", "name_az": "Xəyal salatı", "name_en": "Mechta Salad", "description": "Красная фасоль, белая фасоль, кукуруза, куриное филе, укроп, зеленый лук, майонез", "portion": "200 g", "price_rub": 350, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Bean_and_corn_salad%2C_with_peppers_etc._-_San_Francisco.jpg/500px-Bean_and_corn_salad%2C_with_peppers_etc._-_San_Francisco.jpg" }
                 ]
             },
             "hot_appetizers": {
@@ -598,9 +635,9 @@
                 "category_az": "İsti Qəlyanaltılar",
                 "category_en": "Hot Appetizers",
                 "items": [
-                    { "name_ru": "Гутаб с мясом/сыром зеленью", "name_az": "Ət / pendir / göyərti qutabı", "name_en": "Qutab with Meat or Cheese and Greens", "description": null, "portion": "2 pcs", "price_rub": 290 },
-                    { "name_ru": "Бюрек", "name_az": "Börək", "name_en": "Borek", "description": "Лаваш, лук, куриное мясо, говядина, перец, помидор, грец-орех, сыр, соус", "portion": "250 g", "price_rub": 300 },
-                    { "name_ru": "Пирог", "name_az": "Piroq", "name_en": "Pie", "description": "Куриное мясо, картошка, лук, зелень", "portion": "1 slice", "price_rub": 300 }
+                    { "name_ru": "Гутаб с мясом/сыром зеленью", "name_az": "Ət / pendir / göyərti qutabı", "name_en": "Qutab with Meat or Cheese and Greens", "description": null, "portion": "2 pcs", "price_rub": 290, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Azerbaijani_national_dish_Qutab_with_meat.jpg/500px-Azerbaijani_national_dish_Qutab_with_meat.jpg" },
+                    { "name_ru": "Бюрек", "name_az": "Börək", "name_en": "Borek", "description": "Лаваш, лук, куриное мясо, говядина, перец, помидор, грец-орех, сыр, соус", "portion": "250 g", "price_rub": 300, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/B%C3%B6rek_mit_K%C3%A4se.jpg/500px-B%C3%B6rek_mit_K%C3%A4se.jpg" },
+                    { "name_ru": "Пирог", "name_az": "Piroq", "name_en": "Pie", "description": "Куриное мясо, картошка, лук, зелень", "portion": "1 slice", "price_rub": 300, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chickenpie1.JPG/500px-Chickenpie1.JPG" }
                 ]
             },
             "soups": {
@@ -609,10 +646,10 @@
                 "category_az": "Şorbalar",
                 "category_en": "Soups",
                 "items": [
-                    { "name_ru": "Кюфта", "name_az": "Küftə", "name_en": "Kufta", "description": "Говядина, картофель, нут, лук, мята", "portion": "350 g", "price_rub": 430 },
-                    { "name_ru": "Дюшбара", "name_az": "Düşbərə", "name_en": "Dushbara", "description": "Пресное тесто с мясной начинкой в мясном бульоне", "portion": "300 g", "price_rub": 350 },
-                    { "name_ru": "Красная чечевица", "name_az": "Mərcimək şorbası", "name_en": "Red Lentil Soup", "description": "Чечевица, лук, морковь, картофель, куриное мясо, мята", "portion": "300 g", "price_rub": 250 },
-                    { "name_ru": "Аришта", "name_az": "Əriştə", "name_en": "Arishta", "description": "Домашняя лапша, фасоль, лук, альча", "portion": "300 g", "price_rub": 250 }
+                    { "name_ru": "Кюфта", "name_az": "Küftə", "name_en": "Kufta", "description": "Говядина, картофель, нут, лук, мята", "portion": "350 g", "price_rub": 430, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Azerbaijani_kufta-bozbash.jpg/500px-Azerbaijani_kufta-bozbash.jpg" },
+                    { "name_ru": "Дюшбара", "name_az": "Düşbərə", "name_en": "Dushbara", "description": "Пресное тесто с мясной начинкой в мясном бульоне", "portion": "300 g", "price_rub": 350, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Dushbara.jpg/500px-Dushbara.jpg" },
+                    { "name_ru": "Красная чечевица", "name_az": "Mərcimək şorbası", "name_en": "Red Lentil Soup", "description": "Чечевица, лук, морковь, картофель, куриное мясо, мята", "portion": "300 g", "price_rub": 250, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Liat_Portal_for_Foodie_Disorder_-_Red_lentil_soup_with_vegetables_and_dumpling.jpg/500px-Liat_Portal_for_Foodie_Disorder_-_Red_lentil_soup_with_vegetables_and_dumpling.jpg" },
+                    { "name_ru": "Аришта", "name_az": "Əriştə", "name_en": "Arishta", "description": "Домашняя лапша, фасоль, лук, альча", "portion": "300 g", "price_rub": 250, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Chicken_noodle_soup.jpg/500px-Chicken_noodle_soup.jpg" }
                 ]
             },
             "hot_dishes": {
@@ -621,17 +658,17 @@
                 "category_az": "İsti Yeməklər",
                 "category_en": "Hot Main Courses",
                 "items": [
-                    { "name_ru": "Хинкали", "name_az": "Xingal", "name_en": "Khingali", "description": "Тесто, лук, фарш, соус", "portion": "1 pc", "price_rub": 140 },
-                    { "name_ru": "Бозбаш", "name_az": "Bozbaş", "name_en": "Bozbash", "description": "Говядина, картофель, нуд", "portion": "350 g", "price_rub": 430 },
-                    { "name_ru": "Шапалак", "name_az": "Şapalaq", "name_en": "Shapalak", "description": "Антрикот говяжий, овощной шолен", "portion": "350 g", "price_rub": 500 },
-                    { "name_ru": "Долма с виноградными листьями", "name_az": "Yarpaq dolması", "name_en": "Grape Leaf Dolma", "description": "Мясо баранины, говядина, рис, виноградные листья. Подается с чесночным соусом", "portion": "250 g", "price_rub": 450 },
-                    { "name_ru": "Долма с капустой", "name_az": "Kələm dolması", "name_en": "Cabbage Dolma", "description": "Говядина, капустные листья, рис, помидор, зелень", "portion": "250 g", "price_rub": 400 },
-                    { "name_ru": "Долма «3 сестры»", "name_az": "Üç bacı dolması", "name_en": "Three Sisters Dolma", "description": "Баклажан, помидоры, перец, говядина, базелик", "portion": "350 g", "price_rub": 400 },
-                    { "name_ru": "Плов Азербайджанский", "name_az": "Azərbaycan plovu", "name_en": "Azerbaijani Plov", "description": "Мясо говядины, курица, чернослив, изюм, рис, лук репчатый", "portion": "350 g", "price_rub": 450 },
-                    { "name_ru": "Лаванги рыба", "name_az": "Balıq ləvəngisi", "name_en": "Fish Lavangi", "description": null, "portion": "1000 g", "price_rub": 1200 },
-                    { "name_ru": "Лаванги курица", "name_az": "Toyuq ləvəngisi", "name_en": "Chicken Lavangi", "description": null, "portion": "1000 g", "price_rub": 1100 },
-                    { "name_ru": "Лаванги рулет (куринный)", "name_az": "Toyuq ləvəngi ruleti", "name_en": "Chicken Lavangi Roll", "description": null, "portion": "100 g", "price_rub": 150 },
-                    { "name_ru": "Шах плов", "name_az": "Şah plov", "name_en": "Shah Plov", "description": "Лаваш, фарш говяжий, лук, курага, чернослив, каштан", "portion": "350 g", "price_rub": 430 }
+                    { "name_ru": "Хинкали", "name_az": "Xingal", "name_en": "Khingali", "description": "Тесто, лук, фарш, соус", "portion": "1 pc", "price_rub": 140, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Khinkali_mixed.jpg/500px-Khinkali_mixed.jpg" },
+                    { "name_ru": "Бозбаш", "name_az": "Bozbaş", "name_en": "Bozbash", "description": "Говядина, картофель, нуд", "portion": "350 g", "price_rub": 430, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Bozbash_from_Iranian_%28Azeri%29_cuisine.jpg/500px-Bozbash_from_Iranian_%28Azeri%29_cuisine.jpg" },
+                    { "name_ru": "Шапалак", "name_az": "Şapalaq", "name_en": "Shapalak", "description": "Антрикот говяжий, овощной шолен", "portion": "350 g", "price_rub": 500, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Beef_stew.jpg/500px-Beef_stew.jpg" },
+                    { "name_ru": "Долма с виноградными листьями", "name_az": "Yarpaq dolması", "name_en": "Grape Leaf Dolma", "description": "Мясо баранины, говядина, рис, виноградные листья. Подается с чесночным соусом", "portion": "250 g", "price_rub": 450, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Stuffed_grape_leaves_%28Dolma%29_and_vegetables_in_a_pot.jpg/500px-Stuffed_grape_leaves_%28Dolma%29_and_vegetables_in_a_pot.jpg" },
+                    { "name_ru": "Долма с капустой", "name_az": "Kələm dolması", "name_en": "Cabbage Dolma", "description": "Говядина, капустные листья, рис, помидор, зелень", "portion": "250 g", "price_rub": 400, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Cabbage_rolls_in_medvedkovo.jpg/500px-Cabbage_rolls_in_medvedkovo.jpg" },
+                    { "name_ru": "Долма «3 сестры»", "name_az": "Üç bacı dolması", "name_en": "Three Sisters Dolma", "description": "Баклажан, помидоры, перец, говядина, базелик", "portion": "350 g", "price_rub": 400, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Stuffed_vegetables.JPG/500px-Stuffed_vegetables.JPG" },
+                    { "name_ru": "Плов Азербайджанский", "name_az": "Azərbaycan plovu", "name_en": "Azerbaijani Plov", "description": "Мясо говядины, курица, чернослив, изюм, рис, лук репчатый", "portion": "350 g", "price_rub": 450, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Azerbaijani_plov.JPG/500px-Azerbaijani_plov.JPG" },
+                    { "name_ru": "Лаванги рыба", "name_az": "Balıq ləvəngisi", "name_en": "Fish Lavangi", "description": null, "portion": "1000 g", "price_rub": 1200, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Baliq_Levengi%2C_Azerbaijani_Stuffed_Fish_with_Turmeric_Rice.jpg/500px-Baliq_Levengi%2C_Azerbaijani_Stuffed_Fish_with_Turmeric_Rice.jpg" },
+                    { "name_ru": "Лаванги курица", "name_az": "Toyuq ləvəngisi", "name_en": "Chicken Lavangi", "description": null, "portion": "1000 g", "price_rub": 1100, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Cuce-levengisi.jpg/500px-Cuce-levengisi.jpg" },
+                    { "name_ru": "Лаванги рулет (куринный)", "name_az": "Toyuq ləvəngi ruleti", "name_en": "Chicken Lavangi Roll", "description": null, "portion": "100 g", "price_rub": 150, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Sliced_Flank_Roulade.jpg/500px-Sliced_Flank_Roulade.jpg" },
+                    { "name_ru": "Шах плов", "name_az": "Şah plov", "name_en": "Shah Plov", "description": "Лаваш, фарш говяжий, лук, курага, чернослив, каштан", "portion": "350 g", "price_rub": 430, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/%C5%9Eah_plov_2.jpg/500px-%C5%9Eah_plov_2.jpg" }
                 ]
             },
             "sauces": {
@@ -640,11 +677,11 @@
                 "category_az": "Souslar",
                 "category_en": "Sauces",
                 "items": [
-                    { "name_ru": "Кетчуп", "name_az": "Ketçup", "name_en": "Ketchup", "portion": "50 g", "price_rub": 80 },
-                    { "name_ru": "Наршараб", "name_az": "Narşərab", "name_en": "Narsharab", "portion": "50 g", "price_rub": 80 },
-                    { "name_ru": "Майонез", "name_az": "Mayonez", "name_en": "Mayonnaise", "portion": "50 g", "price_rub": 80 },
-                    { "name_ru": "Сметана", "name_az": "Xama", "name_en": "Sour Cream", "portion": "50 g", "price_rub": 80 },
-                    { "name_ru": "Чесночный", "name_az": "Sarımsaqlı sous", "name_en": "Garlic Sauce", "portion": "50 g", "price_rub": 80 }
+                    { "name_ru": "Кетчуп", "name_az": "Ketçup", "name_en": "Ketchup", "portion": "50 g", "price_rub": 80, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Cup_of_Ketchup_%2827415520141%29.jpg/500px-Cup_of_Ketchup_%2827415520141%29.jpg" },
+                    { "name_ru": "Наршараб", "name_az": "Narşərab", "name_en": "Narsharab", "portion": "50 g", "price_rub": 80, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Pomegranate_molasses_in_a_chinese_spoon.jpg/500px-Pomegranate_molasses_in_a_chinese_spoon.jpg" },
+                    { "name_ru": "Майонез", "name_az": "Mayonez", "name_en": "Mayonnaise", "portion": "50 g", "price_rub": 80, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Fresh_mayonnaise.jpg/500px-Fresh_mayonnaise.jpg" },
+                    { "name_ru": "Сметана", "name_az": "Xama", "name_en": "Sour Cream", "portion": "50 g", "price_rub": 80, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Sour_Cream.jpg/500px-Sour_Cream.jpg" },
+                    { "name_ru": "Чесночный", "name_az": "Sarımsaqlı sous", "name_en": "Garlic Sauce", "portion": "50 g", "price_rub": 80, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Toum_%28Lebanese_Garlic_Sauce%29.JPG/500px-Toum_%28Lebanese_Garlic_Sauce%29.JPG" }
                 ]
             },
             "desserts": {
@@ -653,14 +690,14 @@
                 "category_az": "Desertlər",
                 "category_en": "Desserts",
                 "items": [
-                    { "name_ru": "Пахлава", "name_az": "Paxlava", "name_en": "Pakhlava", "portion": "1 pc", "price_rub": 120 },
-                    { "name_ru": "Шекербура", "name_az": "Şəkərbura", "name_en": "Shekerbura", "portion": "1 pc", "price_rub": 110 },
-                    { "name_ru": "Бадамбура", "name_az": "Badambura", "name_en": "Badambura", "portion": "1 pc", "price_rub": 130 },
-                    { "name_ru": "Торт медовый", "name_az": "Bal tortu", "name_en": "Honey Cake", "portion": "200 g", "price_rub": 300 },
-                    { "name_ru": "Пахлава «Мидия»", "name_az": "Midya paxlavası", "name_en": "Pakhlava Midiya", "portion": "1 pc", "price_rub": 90 },
-                    { "name_ru": "Пирожок «ежик»", "name_az": "Kirpi şirniyyatı", "name_en": "Hedgehog Pastry", "portion": "1 pc", "price_rub": 130 },
-                    { "name_ru": "Гогал", "name_az": "Qoğal", "name_en": "Gogal", "portion": "1 pc", "price_rub": 120 },
-                    { "name_ru": "Халва", "name_az": "Halva", "name_en": "Halva", "portion": "1 pc", "price_rub": 200 }
+                    { "name_ru": "Пахлава", "name_az": "Paxlava", "name_en": "Pakhlava", "portion": "1 pc", "price_rub": 120, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/G%C9%99nc%C9%99_paxlavas%C4%B1_2.JPG/500px-G%C9%99nc%C9%99_paxlavas%C4%B1_2.JPG" },
+                    { "name_ru": "Шекербура", "name_az": "Şəkərbura", "name_en": "Shekerbura", "portion": "1 pc", "price_rub": 110, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Sekerbura_DSC3151.jpg/500px-Sekerbura_DSC3151.jpg" },
+                    { "name_ru": "Бадамбура", "name_az": "Badambura", "name_en": "Badambura", "portion": "1 pc", "price_rub": 130, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Badambura.JPG/500px-Badambura.JPG" },
+                    { "name_ru": "Торт медовый", "name_az": "Bal tortu", "name_en": "Honey Cake", "portion": "200 g", "price_rub": 300, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Medovik.jpg/500px-Medovik.jpg" },
+                    { "name_ru": "Пахлава «Мидия»", "name_az": "Midya paxlavası", "name_en": "Pakhlava Midiya", "portion": "1 pc", "price_rub": 90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Quba_paxlavas%C4%B1.jpg/500px-Quba_paxlavas%C4%B1.jpg" },
+                    { "name_ru": "Пирожок «ежик»", "name_az": "Kirpi şirniyyatı", "name_en": "Hedgehog Pastry", "portion": "1 pc", "price_rub": 130, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Pirozhki_in_the_shape_of_flowers.jpg/500px-Pirozhki_in_the_shape_of_flowers.jpg" },
+                    { "name_ru": "Гогал", "name_az": "Qoğal", "name_en": "Gogal", "portion": "1 pc", "price_rub": 120, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/%C5%9Eorqo%C4%9Fal%C4%B1.JPG/500px-%C5%9Eorqo%C4%9Fal%C4%B1.JPG" },
+                    { "name_ru": "Халва", "name_az": "Halva", "name_en": "Halva", "portion": "1 pc", "price_rub": 200, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Halva_with_almonds%2C_250_g.jpg/500px-Halva_with_almonds%2C_250_g.jpg" }
                 ]
             },
             "beverages": {
@@ -669,15 +706,15 @@
                 "category_az": "İçkilər",
                 "category_en": "Beverages",
                 "items": [
-                    { "name_ru": "Кола", "name_az": "Kola", "name_en": "Coca-Cola", "portion": "0.5 L", "price_rub": 130 },
-                    { "name_ru": "Фанта", "name_az": "Fanta", "name_en": "Fanta", "portion": "0.5 L", "price_rub": 130 },
-                    { "name_ru": "Газировка", "name_az": "Qazlı su", "name_en": "Sparkling Water", "portion": "0.5 L", "price_rub": 110 },
-                    { "name_ru": "Фруктовый сок", "name_az": "Meyvə şirəsi", "name_en": "Fruit Juice", "portion": "0.2 L", "price_rub": 100 },
-                    { "name_ru": "Компот", "name_az": "Kompot", "name_en": "Compote", "portion": "0.2 L", "price_rub": 50 },
-                    { "name_ru": "Чай Азербайджанский", "name_az": "Azərbaycan çayı", "name_en": "Azerbaijani Tea", "portion": "1 L", "price_rub": 200 },
-                    { "name_ru": "Кофе (растворимый)", "name_az": "Qəhvə (həll olunan)", "name_en": "Instant Coffee", "portion": "1 cup", "price_rub": 50 },
-                    { "name_ru": "Кофе (3 в 1)", "name_az": "Qəhvə (3-ü 1-də)", "name_en": "Coffee 3-in-1", "portion": "1 cup", "price_rub": 60 },
-                    { "name_ru": "Кофе (натуральный в зернах)", "name_az": "Qəhvə (dənli)", "name_en": "Bean Coffee", "portion": "1 cup", "price_rub": 130 }
+                    { "name_ru": "Кола", "name_az": "Kola", "name_en": "Coca-Cola", "portion": "0.5 L", "price_rub": 130, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Tumbler_of_cola_with_ice.jpg/500px-Tumbler_of_cola_with_ice.jpg" },
+                    { "name_ru": "Фанта", "name_az": "Fanta", "name_en": "Fanta", "portion": "0.5 L", "price_rub": 130, "image": "https://images.pexels.com/photos/5946617/pexels-photo-5946617.jpeg?cs=srgb&dl=pexels-charlotte-may-5946617.jpg&fm=jpg" },
+                    { "name_ru": "Газировка", "name_az": "Qazlı su", "name_en": "Sparkling Water", "portion": "0.5 L", "price_rub": 110, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Sparkling_Water_%284675945072%29.jpg/500px-Sparkling_Water_%284675945072%29.jpg" },
+                    { "name_ru": "Фруктовый сок", "name_az": "Meyvə şirəsi", "name_en": "Fruit Juice", "portion": "0.2 L", "price_rub": 100, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Orange_juice_1_edit1.jpg/500px-Orange_juice_1_edit1.jpg" },
+                    { "name_ru": "Компот", "name_az": "Kompot", "name_en": "Compote", "portion": "0.2 L", "price_rub": 50, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Peach_kompot.JPG/500px-Peach_kompot.JPG" },
+                    { "name_ru": "Чай Азербайджанский", "name_az": "Azərbaycan çayı", "name_en": "Azerbaijani Tea", "portion": "1 L", "price_rub": 200, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Tea_in_Azerbaijani_national_Armudu_glass.jpg/500px-Tea_in_Azerbaijani_national_Armudu_glass.jpg" },
+                    { "name_ru": "Кофе (растворимый)", "name_az": "Qəhvə (həll olunan)", "name_en": "Instant Coffee", "portion": "1 cup", "price_rub": 50, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/500px-A_small_cup_of_coffee.JPG" },
+                    { "name_ru": "Кофе (3 в 1)", "name_az": "Qəhvə (3-ü 1-də)", "name_en": "Coffee 3-in-1", "portion": "1 cup", "price_rub": 60, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cup_of_coffee_%281%29.jpg/500px-Cup_of_coffee_%281%29.jpg" },
+                    { "name_ru": "Кофе (натуральный в зернах)", "name_az": "Qəhvə (dənli)", "name_en": "Bean Coffee", "portion": "1 cup", "price_rub": 130, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Cup_of_coffee_surrounded_by_beans.jpg/500px-Cup_of_coffee_surrounded_by_beans.jpg" }
                 ]
             }
         };
@@ -825,6 +862,12 @@
                     const itemName = item[`name_${currentLang}`] || item.name_ru;
                     const desc = item.description;
 
+                    let imageContent = item.image ? `
+                        <div class="item-image-wrapper">
+                            <img src="${item.image}" alt="${itemName}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        </div>
+                    ` : '';
+
                     let bodyContent = `
                         <div>
                             <div class="item-header">
@@ -849,7 +892,7 @@
                         footerContent = `<div class="item-footer"><span class="portion-badge">${item.portion}</span></div>`;
                     }
 
-                    itemDiv.innerHTML = bodyContent + footerContent;
+                    itemDiv.innerHTML = imageContent + `<div class="item-body">${bodyContent}${footerContent}</div>`;
                     grid.appendChild(itemDiv);
                 });
 
