@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кафе Вкус Мечты | Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0B0B0E;
+            --card-bg: rgba(22, 22, 28, 0.75);
+            --card-border: rgba(212, 175, 55, 0.15);
+            --card-border-hover: rgba(212, 175, 55, 0.45);
+            --accent-gold: #E5C158;
+            --accent-gold-dark: #B38E2A;
+            --pill-bg: #1A1A22;
+            --text-main: #EDEDF0;
+            --text-muted: #8E8E9A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(20, 18, 30, 0.5) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 2.5rem 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Custom SVG Logo Badge styling */
+        .logo-wrapper {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 1.2rem;
+            filter: drop-shadow(0 4px 15px rgba(229, 193, 88, 0.25));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-wrapper:hover {
+            transform: scale(1.03);
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #FFFFFF 30%, #F4E3AD 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            margin-top: 1.2rem;
+            display: inline-flex;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+        }
+
+        /* Sticky Navigation Bar */
+        .nav-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 11, 14, 0.92);
+            backdrop-filter: blur(15px);
+            padding: 1rem 0 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 1.5rem;
+        }
+
+        .nav-container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 0 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        /* Main Grouping Pills */
+        .main-pills {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .main-pills::-webkit-scrollbar {
+            display: none;
+        }
+
+        .main-pill-btn {
+            background: var(--pill-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            padding: 0.65rem 1.6rem;
+            border-radius: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .main-pill-btn.active {
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* Live Search Input */
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--pill-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 0.8rem 1.2rem 0.8rem 3.2rem;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .search-input::placeholder {
+            color: #666675;
+        }
+
+        /* Subcategory Filter Pills */
+        .sub-pills {
+            display: flex;
+            gap: 0.6rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .sub-pills::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sub-pill-btn {
+            background: var(--pill-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .sub-pill-btn.active {
+            background: rgba(229, 193, 88, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        /* Container & Grid */
+        .container {
+            max-width: 950px;
+            margin: 2.5rem auto 0;
+            padding: 0 1.2rem;
+            min-height: 400px;
+        }
+
+        .category-section {
+            margin-bottom: 4rem;
+        }
+
+        .category-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            text-align: center;
+            color: #F4E3AD;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Cards Design */
+        .menu-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.6rem;
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            border-color: var(--card-border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .item-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 0.5px;
+        }
+
+        .item-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            white-space: nowrap;
+        }
+
+        .item-ingredients {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 300;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .item-footer {
+            margin-top: auto;
+        }
+
+        .portion-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+        }
+
+        .portion-options-grid {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .option-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .option-chip .opt-portion {
+            color: var(--text-muted);
+        }
+
+        .option-chip .opt-price {
+            color: var(--accent-gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            padding: 4rem 1rem;
+        }
+
+        /* Footer Section */
+        footer {
+            margin-top: 5rem;
+            background: rgba(15, 15, 20, 0.95);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 3.5rem 1.5rem 2.5rem;
+        }
+
+        .footer-container {
+            max-width: 950px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .footer-logo-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .footer-contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-item a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-item a:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer-item svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent-gold);
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            max-width: 950px;
+            margin: 2.5rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.4rem; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .category-title { font-size: 2rem; }
+            .menu-item { padding: 1.25rem; }
+            .footer-container { text-align: center; }
+            .footer-brand { align-items: center; }
+            .footer-contacts { align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Custom Vector Badge Logo matching your sticker design -->
+        <div class="logo-wrapper">
+            <svg viewBox="0 0 200 200" width="100%" height="100%">
+                <defs>
+                    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#F4E3AD"/>
+                        <stop offset="50%" stop-color="#E5C158"/>
+                        <stop offset="100%" stop-color="#99751D"/>
+                    </linearGradient>
+                </defs>
+                <!-- Outer Ring -->
+                <circle cx="100" cy="100" r="94" fill="rgba(20,20,25,0.8)" stroke="url(#goldGrad)" stroke-width="3"/>
+                <circle cx="100" cy="100" r="88" fill="none" stroke="url(#goldGrad)" stroke-width="1" stroke-dasharray="4,3"/>
+                
+                <!-- Inner Decorative Leaves -->
+                <path d="M 60 75 C 50 65, 45 80, 62 85 M 58 85 C 48 80, 45 95, 62 95" stroke="url(#goldGrad)" stroke-width="1.5" fill="none"/>
+                <path d="M 140 75 C 150 65, 155 80, 138 85 M 142 85 C 152 80, 155 95, 138 95" stroke="url(#goldGrad)" stroke-width="1.5" fill="none"/>
+
+                <!-- Chef Hat Illustration -->
+                <path d="M82,62 C75,62 72,52 82,45 C88,38 112,38 118,45 C128,52 125,62 118,62 C125,65 120,72 115,72 L85,72 C80,72 75,65 82,62 Z" fill="url(#goldGrad)"/>
+                <rect x="85" y="73" width="30" height="5" rx="1" fill="url(#goldGrad)"/>
+                <path d="M 100,75 L 100,77" stroke="#000" stroke-width="1"/>
+
+                <!-- Pot Illustration -->
+                <path d="M85,115 L115,115 C117,115 119,117 119,120 L116,132 C115,136 110,138 100,138 C90,138 85,136 84,132 L81,120 C81,117 83,115 85,115 Z" fill="url(#goldGrad)"/>
+                <rect x="83" y="112" width="34" height="3" rx="1" fill="url(#goldGrad)"/>
+                <circle cx="100" cy="109" r="2" fill="url(#goldGrad)"/>
+                <!-- Pot Handles -->
+                <path d="M78,118 C75,118 75,124 78,124" stroke="url(#goldGrad)" stroke-width="2" fill="none"/>
+                <path d="M122,118 C125,118 125,124 122,124" stroke="url(#goldGrad)" stroke-width="2" fill="none"/>
+
+                <!-- Heart Accents -->
+                <path d="M100,67 C100,65 98,64 97,65.5 C96,64 94,65 94,67 C94,69 100,71 100,71 C100,71 106,69 106,67 C106,65 104,64 103,65.5 C102,64 100,65 100,67 Z" fill="#000" transform="scale(0.6) translate(66,35)"/>
+                <path d="M100,126 C100,124 98,123 97,124.5 C96,123 94,124 94,126 C94,128 100,130 100,130 C100,130 106,128 106,126 C106,124 104,123 103,124.5 C102,123 100,124 100,126 Z" fill="#000" transform="scale(0.6) translate(66,115)"/>
+
+                <!-- Stars / Sparkles -->
+                <polygon points="100,146 102,150 106,150 103,153 104,157 100,154 96,157 97,153 94,150 98,150" fill="url(#goldGrad)"/>
+            </svg>
+        </div>
+
+        <div class="brand-subtitle">Кафе • Доставка нашего вкуса</div>
+        <h1 id="restaurant-name">Вкус Мечты</h1>
+
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+            <button class="lang-btn active" onclick="changeLang('ru')">RU</button>
+            <button class="lang-btn" onclick="changeLang('az')">AZ</button>
+            <button class="lang-btn" onclick="changeLang('en')">EN</button>
+        </div>
+    </header>
+
+    <!-- Sticky Navigation Layout -->
+    <div class="nav-wrapper">
+        <div class="nav-container">
+            <!-- Main Grouping Pills -->
+            <div class="main-pills" id="main-pills-container"></div>
+
+            <!-- Live Search Bar -->
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" id="search-input" class="search-input" placeholder="Поиск блюда или напитка..." oninput="handleSearch(this.value)">
+            </div>
+
+            <!-- Subcategory Filter Pills -->
+            <div class="sub-pills" id="sub-pills-container"></div>
+        </div>
+    </div>
+
+    <!-- Menu Display Container -->
+    <div class="container" id="menu-container"></div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="footer-logo-title">Кафе «Вкус Мечты»</h3>
+                <p class="footer-tagline">Доставка нашего вкуса</p>
+            </div>
+            <div class="footer-contacts">
+                <div class="footer-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span>г. Югорск, ул. Островская, 2А</span>
+                </div>
+                <div class="footer-item">
+                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <a href="tel:+79952429303">+7 (995) 242-93-03</a>
+                </div>
+                <div class="footer-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <a href="https://instagram.com/Vkus_mechty" target="_blank">@Vkus_mechty</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; Кафе «Вкус Мечты». Все права защищены.
+        </div>
+    </footer>
+
+    <script>
+        const mainCategories = [
+            { id: "food", name: { ru: "Еда", az: "Yeməklər", en: "Food" } },
+            { id: "beverages", name: { ru: "Напитки", az: "İçkilər", en: "Beverages" } },
+            { id: "desserts", name: { ru: "Десерты", az: "Desertlər", en: "Desserts" } }
+        ];
+
+        const menuData = {
+            "cold_appetizers": {
+                "main_category": "food",
+                "category_ru": "Холодные Закуски",
+                "category_az": "Soyuq Qəlyanaltılar",
+                "category_en": "Cold Appetizers",
+                "items": [
+                    { "name_ru": "Соленья ассорти", "name_az": "Turşu assortisi", "name_en": "Pickled Assortment", "description": "Огурцы, помидоры, капуста, чеснок, перец", "portion": "250 g", "price_rub": 350 },
+                    { "name_ru": "Рулет из баклажанов", "name_az": "Badımcan ruleti", "name_en": "Eggplant Rolls", "description": "Баклажан, сырная начинка, грецкий орех, зелень", "portion": "150 g", "price_rub": 350 },
+                    { "name_ru": "Зеленая тарелка", "name_az": "Göyərti boşqabı", "name_en": "Green Herb Platter", "description": "Петрушка, лук зеленый, укроп", "portion": "120 g", "price_rub": 180 },
+                    { "name_ru": "Фруктовое плато", "name_az": "Meyvə boşqabı", "name_en": "Fruit Platter", "description": "Сезонные фрукты", "portion": "800 g", "price_rub": 490 },
+                    { "name_ru": "Помидоры Бакинские", "name_az": "Bakı pomidoru", "name_en": "Baku Tomatoes", "description": null, "portion": "180 g", "price_rub": 220 },
+                    { "name_ru": "Огурцы Бакинские", "name_az": "Bakı xiyarı", "name_en": "Baku Cucumbers", "description": null, "portion": "180 g", "price_rub": 220 },
+                    { "name_ru": "Лимон", "name_az": "Limon", "name_en": "Lemon", "description": null, "portion": "100 g", "price_rub": 80 },
+                    { "name_ru": "Довга", "name_az": "Dovğa", "name_en": "Dovga", "description": "Кисломолочный суп, травы, нут, рис, мука, яйцо", "portion_options": [{ "portion": "200 ml", "price_rub": 150 }, { "portion": "1 L", "price_rub": 750 }] },
+                    { "name_ru": "Айран", "name_az": "Ayran", "name_en": "Ayran", "description": "Охлаждающий напиток на основе кефира", "portion_options": [{ "portion": "200 ml", "price_rub": 100 }, { "portion": "1 L", "price_rub": 350 }] },
+                    { "name_ru": "Окрошка", "name_az": "Okroşka", "name_en": "Okroshka", "description": null, "portion_options": [{ "portion": "200 ml", "price_rub": 150 }, { "portion": "1 L", "price_rub": 400 }] }
+                ]
+            },
+            "salads": {
+                "main_category": "food",
+                "category_ru": "Салаты",
+                "category_az": "Salatlar",
+                "category_en": "Salads",
+                "items": [
+                    { "name_ru": "Салат «Чобан»", "name_az": "Çoban salatı", "name_en": "Choban Salad", "description": "Помидор, огурец, красный лук, зелень ассорти, оливковое масло", "portion": "200 g", "price_rub": 330 },
+                    { "name_ru": "Салат «Мангал»", "name_az": "Manqal salatı", "name_en": "Mangal Salad", "description": "Красный перец, баклажан, помидор, чеснок, оливковое масло", "portion": "200 g", "price_rub": 340 },
+                    { "name_ru": "Оливье", "name_az": "Olivye salatı", "name_en": "Olivier Salad", "description": "Филе куриное, морковь, яйца, картофель отварной, горох зеленый, свежие огурцы, укроп", "portion": "200 g", "price_rub": 290 },
+                    { "name_ru": "Мечта", "name_az": "Xəyal salatı", "name_en": "Mechta Salad", "description": "Красная фасоль, белая фасоль, кукуруза, куриное филе, укроп, зеленый лук, майонез", "portion": "200 g", "price_rub": 350 }
+                ]
+            },
+            "hot_appetizers": {
+                "main_category": "food",
+                "category_ru": "Горячие Закуски",
+                "category_az": "İsti Qəlyanaltılar",
+                "category_en": "Hot Appetizers",
+                "items": [
+                    { "name_ru": "Гутаб с мясом/сыром зеленью", "name_az": "Ət / pendir / göyərti qutabı", "name_en": "Qutab with Meat or Cheese and Greens", "description": null, "portion": "2 pcs", "price_rub": 290 },
+                    { "name_ru": "Бюрек", "name_az": "Börək", "name_en": "Borek", "description": "Лаваш, лук, куриное мясо, говядина, перец, помидор, грец-орех, сыр, соус", "portion": "250 g", "price_rub": 300 },
+                    { "name_ru": "Пирог", "name_az": "Piroq", "name_en": "Pie", "description": "Куриное мясо, картошка, лук, зелень", "portion": "1 slice", "price_rub": 300 }
+                ]
+            },
+            "soups": {
+                "main_category": "food",
+                "category_ru": "Супы",
+                "category_az": "Şorbalar",
+                "category_en": "Soups",
+                "items": [
+                    { "name_ru": "Кюфта", "name_az": "Küftə", "name_en": "Kufta", "description": "Говядина, картофель, нут, лук, мята", "portion": "350 g", "price_rub": 430 },
+                    { "name_ru": "Дюшбара", "name_az": "Düşbərə", "name_en": "Dushbara", "description": "Пресное тесто с мясной начинкой в мясном бульоне", "portion": "300 g", "price_rub": 350 },
+                    { "name_ru": "Красная чечевица", "name_az": "Mərcimək şorbası", "name_en": "Red Lentil Soup", "description": "Чечевица, лук, морковь, картофель, куриное мясо, мята", "portion": "300 g", "price_rub": 250 },
+                    { "name_ru": "Аришта", "name_az": "Əriştə", "name_en": "Arishta", "description": "Домашняя лапша, фасоль, лук, альча", "portion": "300 g", "price_rub": 250 }
+                ]
+            },
+            "hot_dishes": {
+                "main_category": "food",
+                "category_ru": "Горячие Блюда",
+                "category_az": "İsti Yeməklər",
+                "category_en": "Hot Main Courses",
+                "items": [
+                    { "name_ru": "Хинкали", "name_az": "Xingal", "name_en": "Khingali", "description": "Тесто, лук, фарш, соус", "portion": "1 pc", "price_rub": 140 },
+                    { "name_ru": "Бозбаш", "name_az": "Bozbaş", "name_en": "Bozbash", "description": "Говядина, картофель, нуд", "portion": "350 g", "price_rub": 430 },
+                    { "name_ru": "Шапалак", "name_az": "Şapalaq", "name_en": "Shapalak", "description": "Антрикот говяжий, овощной шолен", "portion": "350 g", "price_rub": 500 },
+                    { "name_ru": "Долма с виноградными листьями", "name_az": "Yarpaq dolması", "name_en": "Grape Leaf Dolma", "description": "Мясо баранины, говядина, рис, виноградные листья. Подается с чесночным соусом", "portion": "250 g", "price_rub": 450 },
+                    { "name_ru": "Долма с капустой", "name_az": "Kələm dolması", "name_en": "Cabbage Dolma", "description": "Говядина, капустные листья, рис, помидор, зелень", "portion": "250 g", "price_rub": 400 },
+                    { "name_ru": "Долма «3 сестры»", "name_az": "Üç bacı dolması", "name_en": "Three Sisters Dolma", "description": "Баклажан, помидоры, перец, говядина, базелик", "portion": "350 g", "price_rub": 400 },
+                    { "name_ru": "Плов Азербайджанский", "name_az": "Azərbaycan plovu", "name_en": "Azerbaijani Plov", "description": "Мясо говядины, курица, чернослив, изюм, рис, лук репчатый", "portion": "350 g", "price_rub": 450 },
+                    { "name_ru": "Лаванги рыба", "name_az": "Balıq ləvəngisi", "name_en": "Fish Lavangi", "description": null, "portion": "1000 g", "price_rub": 1200 },
+                    { "name_ru": "Лаванги курица", "name_az": "Toyuq ləvəngisi", "name_en": "Chicken Lavangi", "description": null, "portion": "1000 g", "price_rub": 1100 },
+                    { "name_ru": "Лаванги рулет (куринный)", "name_az": "Toyuq ləvəngi ruleti", "name_en": "Chicken Lavangi Roll", "description": null, "portion": "100 g", "price_rub": 150 },
+                    { "name_ru": "Шах плов", "name_az": "Şah plov", "name_en": "Shah Plov", "description": "Лаваш, фарш говяжий, лук, курага, чернослив, каштан", "portion": "350 g", "price_rub": 430 }
+                ]
+            },
+            "sauces": {
+                "main_category": "food",
+                "category_ru": "Соусы",
+                "category_az": "Souslar",
+                "category_en": "Sauces",
+                "items": [
+                    { "name_ru": "Кетчуп", "name_az": "Ketçup", "name_en": "Ketchup", "portion": "50 g", "price_rub": 80 },
+                    { "name_ru": "Наршараб", "name_az": "Narşərab", "name_en": "Narsharab", "portion": "50 g", "price_rub": 80 },
+                    { "name_ru": "Майонез", "name_az": "Mayonez", "name_en": "Mayonnaise", "portion": "50 g", "price_rub": 80 },
+                    { "name_ru": "Сметана", "name_az": "Xama", "name_en": "Sour Cream", "portion": "50 g", "price_rub": 80 },
+                    { "name_ru": "Чесночный", "name_az": "Sarımsaqlı sous", "name_en": "Garlic Sauce", "portion": "50 g", "price_rub": 80 }
+                ]
+            },
+            "desserts": {
+                "main_category": "desserts",
+                "category_ru": "Десерты",
+                "category_az": "Desertlər",
+                "category_en": "Desserts",
+                "items": [
+                    { "name_ru": "Пахлава", "name_az": "Paxlava", "name_en": "Pakhlava", "portion": "1 pc", "price_rub": 120 },
+                    { "name_ru": "Шекербура", "name_az": "Şəkərbura", "name_en": "Shekerbura", "portion": "1 pc", "price_rub": 110 },
+                    { "name_ru": "Бадамбура", "name_az": "Badambura", "name_en": "Badambura", "portion": "1 pc", "price_rub": 130 },
+                    { "name_ru": "Торт медовый", "name_az": "Bal tortu", "name_en": "Honey Cake", "portion": "200 g", "price_rub": 300 },
+                    { "name_ru": "Пахлава «Мидия»", "name_az": "Midya paxlavası", "name_en": "Pakhlava Midiya", "portion": "1 pc", "price_rub": 90 },
+                    { "name_ru": "Пирожок «ежик»", "name_az": "Kirpi şirniyyatı", "name_en": "Hedgehog Pastry", "portion": "1 pc", "price_rub": 130 },
+                    { "name_ru": "Гогал", "name_az": "Qoğal", "name_en": "Gogal", "portion": "1 pc", "price_rub": 120 },
+                    { "name_ru": "Халва", "name_az": "Halva", "name_en": "Halva", "portion": "1 pc", "price_rub": 200 }
+                ]
+            },
+            "beverages": {
+                "main_category": "beverages",
+                "category_ru": "Напитки",
+                "category_az": "İçkilər",
+                "category_en": "Beverages",
+                "items": [
+                    { "name_ru": "Кола", "name_az": "Kola", "name_en": "Coca-Cola", "portion": "0.5 L", "price_rub": 130 },
+                    { "name_ru": "Фанта", "name_az": "Fanta", "name_en": "Fanta", "portion": "0.5 L", "price_rub": 130 },
+                    { "name_ru": "Газировка", "name_az": "Qazlı su", "name_en": "Sparkling Water", "portion": "0.5 L", "price_rub": 110 },
+                    { "name_ru": "Фруктовый сок", "name_az": "Meyvə şirəsi", "name_en": "Fruit Juice", "portion": "0.2 L", "price_rub": 100 },
+                    { "name_ru": "Компот", "name_az": "Kompot", "name_en": "Compote", "portion": "0.2 L", "price_rub": 50 },
+                    { "name_ru": "Чай Азербайджанский", "name_az": "Azərbaycan çayı", "name_en": "Azerbaijani Tea", "portion": "1 L", "price_rub": 200 },
+                    { "name_ru": "Кофе (растворимый)", "name_az": "Qəhvə (həll olunan)", "name_en": "Instant Coffee", "portion": "1 cup", "price_rub": 50 },
+                    { "name_ru": "Кофе (3 в 1)", "name_az": "Qəhvə (3-ü 1-də)", "name_en": "Coffee 3-in-1", "portion": "1 cup", "price_rub": 60 },
+                    { "name_ru": "Кофе (натуральный в зернах)", "name_az": "Qəhvə (dənli)", "name_en": "Bean Coffee", "portion": "1 cup", "price_rub": 130 }
+                ]
+            }
+        };
+
+        const restaurantNames = { ru: "Вкус Мечты", az: "Xəyal Dadı", en: "Taste of Dream" };
+        const placeholders = {
+            ru: "Поиск блюда или напитка...",
+            az: "Yemək və ya içki axtarın...",
+            en: "Type a dish or drink..."
+        };
+
+        let currentLang = 'ru';
+        let activeMainCat = 'food';
+        let activeSubCat = 'all';
+        let searchQuery = '';
+
+        function init() {
+            renderMainPills();
+            renderSubPills();
+            renderMenu();
+        }
+
+        function renderMainPills() {
+            const container = document.getElementById('main-pills-container');
+            container.innerHTML = mainCategories.map(cat => `
+                <button class="main-pill-btn ${cat.id === activeMainCat ? 'active' : ''}" onclick="selectMainCat('${cat.id}')">
+                    ${cat.name[currentLang]}
+                </button>
+            `).join('');
+        }
+
+        function selectMainCat(catId) {
+            activeMainCat = catId;
+            activeSubCat = 'all';
+            renderMainPills();
+            renderSubPills();
+            renderMenu();
+        }
+
+        function renderSubPills() {
+            const container = document.getElementById('sub-pills-container');
+            const keys = Object.keys(menuData).filter(k => menuData[k].main_category === activeMainCat);
+            
+            if (keys.length <= 1) {
+                container.style.display = 'none';
+                return;
+            } else {
+                container.style.display = 'flex';
+            }
+
+            let allText = { ru: "ВСЕ", az: "HAMISI", en: "ALL" }[currentLang];
+
+            let html = `<button class="sub-pill-btn ${activeSubCat === 'all' ? 'active' : ''}" onclick="selectSubCat('all')">${allText}</button>`;
+            
+            keys.forEach(k => {
+                const subName = menuData[k][`category_${currentLang}`] || menuData[k].category_ru;
+                html += `<button class="sub-pill-btn ${activeSubCat === k ? 'active' : ''}" onclick="selectSubCat('${k}')">${subName}</button>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function selectSubCat(subId) {
+            activeSubCat = subId;
+            renderSubPills();
+            renderMenu();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.trim().toLowerCase();
+            renderMenu();
+        }
+
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+
+            let matchedCount = 0;
+
+            Object.keys(menuData).forEach(catKey => {
+                const catData = menuData[catKey];
+                
+                if (catData.main_category !== activeMainCat) return;
+                if (activeSubCat !== 'all' && activeSubCat !== catKey) return;
+
+                const filteredItems = catData.items.filter(item => {
+                    const name = (item[`name_${currentLang}`] || item.name_ru).toLowerCase();
+                    const desc = (item.description || '').toLowerCase();
+                    return name.includes(searchQuery) || desc.includes(searchQuery);
+                });
+
+                if (filteredItems.length === 0) return;
+                matchedCount += filteredItems.length;
+
+                const catTitle = catData[`category_${currentLang}`] || catData.category_ru;
+
+                const section = document.createElement('div');
+                section.className = 'category-section';
+
+                const title = document.createElement('h2');
+                title.className = 'category-title';
+                title.textContent = catTitle;
+                section.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'menu-grid';
+
+                filteredItems.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'menu-item';
+
+                    const itemName = item[`name_${currentLang}`] || item.name_ru;
+                    const desc = item.description;
+
+                    let bodyContent = `
+                        <div>
+                            <div class="item-header">
+                                <h3 class="item-name">${itemName}</h3>
+                                ${item.price_rub ? `<span class="item-price">${item.price_rub} ₽</span>` : ''}
+                            </div>
+                            ${desc ? `<p class="item-ingredients">${desc}</p>` : ''}
+                        </div>
+                    `;
+
+                    let footerContent = '';
+                    if (item.portion_options && item.portion_options.length > 0) {
+                        let optionsHtml = item.portion_options.map(opt => `
+                            <div class="option-chip">
+                                <span class="opt-portion">${opt.portion}</span>
+                                <span class="opt-price">${opt.price_rub} ₽</span>
+                            </div>
+                        `).join('');
+
+                        footerContent = `<div class="portion-options-grid">${optionsHtml}</div>`;
+                    } else if (item.portion) {
+                        footerContent = `<div class="item-footer"><span class="portion-badge">${item.portion}</span></div>`;
+                    }
+
+                    itemDiv.innerHTML = bodyContent + footerContent;
+                    grid.appendChild(itemDiv);
+                });
+
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+
+            if (matchedCount === 0) {
+                container.innerHTML = `<div class="no-results">${{ ru: "Ничего не найдено", az: "Məlumat tapılmadı", en: "No items found" }[currentLang]}</div>`;
+            }
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+            });
+
+            document.getElementById('restaurant-name').textContent = restaurantNames[currentLang];
+            document.getElementById('search-input').placeholder = placeholders[currentLang];
+
+            renderMainPills();
+            renderSubPills();
+            renderMenu();
+        }
+
+        init();
+    </script>
+</body>
+</html>
