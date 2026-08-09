@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -746,8 +746,37 @@
             renderMenu();
         }
 
+        // Normalizes text for fuzzy, language-agnostic search:
+        // strips Azerbaijani diacritics (ç, ə, ı, ö, ü, ş, ğ) and
+        // transliterates Cyrillic to Latin, so "coban" matches
+        // both "Çoban salatı" and "Салат «Чобан»".
+        function normalizeText(str) {
+            if (!str) return '';
+
+            const azMap = { 'ə': 'e', 'ı': 'i', 'ö': 'o', 'ü': 'u', 'ç': 'c', 'ş': 's', 'ğ': 'g' };
+            const cyrMap = {
+                а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',
+                и: 'i', й: 'i', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r',
+                с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'sch',
+                ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya'
+            };
+
+            let s = str.toLowerCase();
+            s = s.split('').map(ch => azMap[ch] ?? ch).join('');
+            s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            s = s.split('').map(ch => cyrMap[ch] ?? ch).join('');
+            s = s.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+            return s;
+        }
+
+        function getSearchableText(item) {
+            return normalizeText(
+                [item.name_ru, item.name_az, item.name_en, item.description].filter(Boolean).join(' ')
+            );
+        }
+
         function handleSearch(val) {
-            searchQuery = val.trim().toLowerCase();
+            searchQuery = normalizeText(val);
             renderMenu();
         }
 
@@ -756,17 +785,21 @@
             container.innerHTML = '';
 
             let matchedCount = 0;
+            const isSearching = searchQuery.length > 0;
 
             Object.keys(menuData).forEach(catKey => {
                 const catData = menuData[catKey];
-                
-                if (catData.main_category !== activeMainCat) return;
-                if (activeSubCat !== 'all' && activeSubCat !== catKey) return;
+
+                // While searching, look across every category/tab so a match
+                // is never hidden behind an unrelated main/sub filter.
+                if (!isSearching) {
+                    if (catData.main_category !== activeMainCat) return;
+                    if (activeSubCat !== 'all' && activeSubCat !== catKey) return;
+                }
 
                 const filteredItems = catData.items.filter(item => {
-                    const name = (item[`name_${currentLang}`] || item.name_ru).toLowerCase();
-                    const desc = (item.description || '').toLowerCase();
-                    return name.includes(searchQuery) || desc.includes(searchQuery);
+                    if (!isSearching) return true;
+                    return getSearchableText(item).includes(searchQuery);
                 });
 
                 if (filteredItems.length === 0) return;
