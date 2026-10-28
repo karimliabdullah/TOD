@@ -46,64 +46,56 @@
             align-items: center;
         }
 
-        /* Collapsible header wrapper: animates real content height on scroll
-           via the grid-template-rows 1fr -> 0fr trick (no fixed px guessing). */
+        /* The header stays in normal document flow and simply scrolls away.
+           Collapsing it on scroll changed the page height, which pulled the
+           scroll position back above the threshold and made the page shake. */
         .header-collapsible {
-            display: grid;
-            grid-template-rows: 1fr;
             width: 100%;
-            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header-collapsible-inner {
-            overflow: hidden;
-            min-height: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 2.5rem 0 1rem;
-            transition: padding 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
         }
 
-        body.scrolled .header-collapsible {
-            grid-template-rows: 0fr;
+        /* Compact brand + language row. Fixed to the top and slid in with a
+           transform once the nav bar sticks, so it never changes layout. */
+        :root {
+            --compact-h: 56px;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        body.scrolled .header-collapsible-inner {
-            padding: 0 0;
-            opacity: 0;
-        }
-
-        /* Compact brand + language row inside the sticky nav bar. Collapsed to
-           zero height by default; eases open in normal document flow once the
-           header scrolls away, so it pushes the tabs down instead of
-           floating over them. */
         .compact-bar {
-            max-width: 950px;
-            margin: 0 auto;
-            padding: 0 1.2rem;
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 101;
+            height: var(--compact-h);
+            background: rgba(11, 11, 14, 0.92);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            transform: translateY(-100%);
+            visibility: hidden;
+            transition: transform 0.28s var(--ease-out), visibility 0s linear 0.28s;
         }
 
         body.scrolled .compact-bar {
-            grid-template-rows: 1fr;
+            transform: translateY(0);
+            visibility: visible;
+            transition: transform 0.28s var(--ease-out), visibility 0s;
         }
 
         .compact-bar-inner {
-            overflow: hidden;
-            min-height: 0;
+            max-width: 950px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            opacity: 0;
-            transition: opacity 0.3s ease, margin-bottom 0.4s ease;
-        }
-
-        body.scrolled .compact-bar-inner {
-            opacity: 1;
-            margin-bottom: 0.85rem;
         }
 
         .compact-brand {
@@ -204,7 +196,16 @@
             backdrop-filter: blur(15px);
             padding: 1rem 0 0.8rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 1.5rem;
+            transition: transform 0.28s var(--ease-out);
+        }
+
+        body.scrolled .nav-wrapper {
+            transform: translateY(var(--compact-h));
+        }
+
+        /* Marks where the nav bar starts sticking. */
+        .nav-sentinel {
+            height: 1.5rem;
         }
 
         .nav-container {
@@ -343,7 +344,7 @@
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
             gap: 1.5rem;
         }
 
@@ -357,7 +358,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.3s ease;
+            transition: transform 0.25s var(--ease-out), border-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
             overflow: hidden;
         }
 
@@ -380,7 +381,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.4s ease;
+            transition: transform 0.3s var(--ease-out);
         }
 
         .menu-item:hover .item-image-wrapper img {
@@ -506,6 +507,7 @@
         .detail-overlay.active {
             opacity: 1;
             visibility: visible;
+            transition: opacity 0.3s ease, visibility 0s;
         }
 
         .detail-sheet {
@@ -727,6 +729,34 @@
             color: var(--text-muted);
         }
 
+        /* Keyboard focus */
+        .lang-btn:focus-visible,
+        .main-pill-btn:focus-visible,
+        .sub-pill-btn:focus-visible,
+        .detail-close-btn:focus-visible,
+        .detail-share-btn:focus-visible,
+        .footer-item a:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        .menu-item:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 3px;
+            border-color: var(--card-border-hover);
+        }
+
+        .search-input:focus-visible {
+            box-shadow: 0 0 0 3px rgba(229, 193, 88, 0.25);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
         @media (max-width: 600px) {
             h1 { font-size: 2.4rem; }
             .menu-grid { grid-template-columns: 1fr; }
@@ -788,29 +818,31 @@
 
         <!-- Language Switcher -->
         <div class="lang-switcher">
-            <button class="lang-btn active" onclick="changeLang('ru')">RU</button>
-            <button class="lang-btn" onclick="changeLang('az')">AZ</button>
-            <button class="lang-btn" onclick="changeLang('en')">EN</button>
+            <button class="lang-btn active" aria-pressed="true" onclick="changeLang('ru')">RU</button>
+            <button class="lang-btn" aria-pressed="false" onclick="changeLang('az')">AZ</button>
+            <button class="lang-btn" aria-pressed="false" onclick="changeLang('en')">EN</button>
         </div>
         </div>
       </div>
     </header>
 
-    <!-- Sticky Navigation Layout -->
-    <div class="nav-wrapper">
-        <!-- Compact brand + language row: collapsed to zero height until the
-             header scrolls out of view, then eases open in normal document
-             flow so it never overlaps the tabs below it. -->
-        <div class="compact-bar" id="compact-bar">
-            <div class="compact-bar-inner">
-                <span class="compact-brand" id="compact-brand">Вкус Мечты</span>
-                <div class="lang-switcher-compact">
-                    <button class="lang-btn active" onclick="changeLang('ru')">RU</button>
-                    <button class="lang-btn" onclick="changeLang('az')">AZ</button>
-                    <button class="lang-btn" onclick="changeLang('en')">EN</button>
-                </div>
+    <!-- Compact brand + language row: slides in at the top once the
+         header has scrolled out of view. -->
+    <div class="compact-bar" id="compact-bar">
+        <div class="compact-bar-inner">
+            <span class="compact-brand" id="compact-brand">Вкус Мечты</span>
+            <div class="lang-switcher-compact">
+                <button class="lang-btn active" aria-pressed="true" onclick="changeLang('ru')">RU</button>
+                <button class="lang-btn" aria-pressed="false" onclick="changeLang('az')">AZ</button>
+                <button class="lang-btn" aria-pressed="false" onclick="changeLang('en')">EN</button>
             </div>
         </div>
+    </div>
+
+    <div class="nav-sentinel" id="nav-sentinel" aria-hidden="true"></div>
+
+    <!-- Sticky Navigation Layout -->
+    <nav class="nav-wrapper" id="nav-wrapper" aria-label="Menu categories">
         <div class="nav-container">
             <!-- Main Grouping Pills -->
             <div class="main-pills" id="main-pills-container"></div>
@@ -818,22 +850,22 @@
             <!-- Live Search Bar -->
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                <input type="text" id="search-input" class="search-input" placeholder="Поиск блюда или напитка..." oninput="handleSearch(this.value)">
+                <input type="search" id="search-input" class="search-input" placeholder="Поиск блюда или напитка..." aria-label="Поиск блюда или напитка" oninput="handleSearch(this.value)">
             </div>
 
             <!-- Subcategory Filter Pills -->
             <div class="sub-pills" id="sub-pills-container"></div>
         </div>
-    </div>
+    </nav>
 
     <!-- Menu Display Container -->
     <div class="container" id="menu-container"></div>
 
     <!-- Item Detail Bottom Sheet -->
     <div class="detail-overlay" id="detail-overlay" onclick="closeItemDetailBackdrop(event)">
-        <div class="detail-sheet" id="detail-sheet">
+        <div class="detail-sheet" id="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-name">
             <div class="detail-image-wrapper" id="detail-image-wrapper">
-                <img id="detail-image" src="" alt="">
+                <img id="detail-image" alt="">
                 <button class="detail-close-btn" onclick="closeItemDetail()" aria-label="Close">&times;</button>
             </div>
             <div class="detail-body">
@@ -1030,7 +1062,7 @@
         function renderMainPills() {
             const container = document.getElementById('main-pills-container');
             container.innerHTML = mainCategories.map(cat => `
-                <button class="main-pill-btn ${cat.id === activeMainCat ? 'active' : ''}" onclick="selectMainCat('${cat.id}')">
+                <button class="main-pill-btn ${cat.id === activeMainCat ? 'active' : ''}" aria-pressed="${cat.id === activeMainCat}" onclick="selectMainCat('${cat.id}')">
                     ${cat.name[currentLang]}
                 </button>
             `).join('');
@@ -1042,6 +1074,19 @@
             renderMainPills();
             renderSubPills();
             renderMenu();
+            scrollToMenuStart();
+        }
+
+        // After the menu is re-filtered, a reader scrolled far down would be
+        // left below the (now shorter) list, looking at an empty screen.
+        // Bring the start of the menu back into view instead.
+        function scrollToMenuStart() {
+            const menuTop = document.getElementById('nav-sentinel').getBoundingClientRect().bottom + window.scrollY;
+            if (window.scrollY <= menuTop) return;
+            // Just above the sticking point, so the compact bar stays
+            // tucked away and doesn't cover the first section title.
+            const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: Math.floor(menuTop) - 2, behavior: smooth ? 'smooth' : 'auto' });
         }
 
         function renderSubPills() {
@@ -1057,11 +1102,11 @@
 
             let allText = { ru: "ВСЕ", az: "HAMISI", en: "ALL" }[currentLang];
 
-            let html = `<button class="sub-pill-btn ${activeSubCat === 'all' ? 'active' : ''}" onclick="selectSubCat('all')">${allText}</button>`;
+            let html = `<button class="sub-pill-btn ${activeSubCat === 'all' ? 'active' : ''}" aria-pressed="${activeSubCat === 'all'}" onclick="selectSubCat('all')">${allText}</button>`;
             
             keys.forEach(k => {
                 const subName = menuData[k][`category_${currentLang}`] || menuData[k].category_ru;
-                html += `<button class="sub-pill-btn ${activeSubCat === k ? 'active' : ''}" onclick="selectSubCat('${k}')">${subName}</button>`;
+                html += `<button class="sub-pill-btn ${activeSubCat === k ? 'active' : ''}" aria-pressed="${activeSubCat === k}" onclick="selectSubCat('${k}')">${subName}</button>`;
             });
 
             container.innerHTML = html;
@@ -1071,6 +1116,7 @@
             activeSubCat = subId;
             renderSubPills();
             renderMenu();
+            scrollToMenuStart();
         }
 
         // Normalizes text for fuzzy, language-agnostic search:
@@ -1105,6 +1151,7 @@
         function handleSearch(val) {
             searchQuery = normalizeText(val);
             renderMenu();
+            scrollToMenuStart();
         }
 
         function renderMenu() {
@@ -1148,13 +1195,15 @@
                 filteredItems.forEach(item => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'menu-item';
+                    itemDiv.tabIndex = 0;
+                    itemDiv.setAttribute('role', 'button');
 
                     const itemName = item[`name_${currentLang}`] || item.name_ru;
                     const desc = item.description;
 
                     let imageContent = item.image ? `
                         <div class="item-image-wrapper">
-                            <img src="${item.image}" alt="${itemName}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            <img src="${item.image}" alt="${itemName}" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">
                         </div>
                     ` : '';
 
@@ -1183,7 +1232,14 @@
                     }
 
                     itemDiv.innerHTML = imageContent + `<div class="item-body">${bodyContent}${footerContent}</div>`;
+                    itemDiv.setAttribute('aria-label', item.price_rub ? `${itemName}, ${item.price_rub} ₽` : itemName);
                     itemDiv.addEventListener('click', () => openItemDetail(item, catKey));
+                    itemDiv.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openItemDetail(item, catKey);
+                        }
+                    });
                     grid.appendChild(itemDiv);
                 });
 
@@ -1200,9 +1256,11 @@
             currentLang = lang;
             
             document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+                const isActive = btn.textContent.toLowerCase() === lang;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', isActive);
             });
+            document.documentElement.lang = lang;
 
             document.getElementById('restaurant-name').textContent = restaurantNames[currentLang];
             document.getElementById('compact-brand').textContent = restaurantNames[currentLang];
@@ -1220,13 +1278,17 @@
         let currentDetailCatKey = null;
         const shareLabels = { ru: "Поделиться", az: "Paylaş", en: "Share" };
 
+        let lastFocusedEl = null;
+
         function openItemDetail(item, catKey) {
+            lastFocusedEl = document.activeElement;
             currentDetailItem = item;
             currentDetailCatKey = catKey;
             renderDetailContent();
             document.getElementById('detail-overlay').classList.add('active');
             document.getElementById('detail-sheet').scrollTop = 0;
             document.body.style.overflow = 'hidden';
+            document.querySelector('.detail-close-btn').focus({ preventScroll: true });
         }
 
         function renderDetailContent() {
@@ -1274,10 +1336,12 @@
         }
 
         function closeItemDetail() {
+            if (!currentDetailItem) return;
             document.getElementById('detail-overlay').classList.remove('active');
             document.body.style.overflow = '';
             currentDetailItem = null;
             currentDetailCatKey = null;
+            if (lastFocusedEl) lastFocusedEl.focus({ preventScroll: true });
         }
 
         function closeItemDetailBackdrop(e) {
@@ -1303,24 +1367,13 @@
             if (e.key === 'Escape') closeItemDetail();
         });
 
-        // Collapse the header into the floating top-right language switcher on scroll.
-        const SCROLL_COLLAPSE_THRESHOLD = 60;
-        let scrollTicking = false;
-
-        function updateScrolledState() {
-            document.body.classList.toggle('scrolled', window.scrollY > SCROLL_COLLAPSE_THRESHOLD);
-            scrollTicking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!scrollTicking) {
-                requestAnimationFrame(updateScrolledState);
-                scrollTicking = true;
-            }
-        }, { passive: true });
+        // Show the compact brand bar once the nav bar starts sticking. Nothing
+        // here changes the page height, so it cannot feed back into scroll.
+        new IntersectionObserver(([entry]) => {
+            document.body.classList.toggle('scrolled', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+        }, { rootMargin: '-1px 0px 0px 0px' }).observe(document.getElementById('nav-sentinel'));
 
         init();
-        updateScrolledState();
     </script>
 </body>
 </html>
